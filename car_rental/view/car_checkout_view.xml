@@ -14,32 +14,47 @@
                     <field name="end_date1"/>
                     <field name="car2"/>
                     <field name="driver"/>
+                    <field name="checkout_status"/>
             </tree>
         </field>
     </record>
 
-<!--    <record id="car_checkout_form_view" model="ir.ui.view">-->
-<!--        <field name="name">Car Checkout Form View</field>-->
-<!--        <field name="model">car.checkout</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <form>-->
-<!--                <sheet>-->
-<!--                    <group>-->
-<!--                        <group>-->
-<!--                            <field name="customer_name"/>-->
-<!--                            <field name="customer_email"/>-->
-<!--                            <field name="customer_phone"/>-->
-<!--                            <field name="customer_age"/>-->
-<!--                            <field name="start_dt1"/>-->
-<!--                            <field name="time_slot"/>-->
-<!--                            <field name="end_date1"/>-->
-<!--                            <field name="car2"/>-->
-<!--                        </group>-->
-<!--                    </group>-->
-<!--                </sheet>-->
-<!--            </form>-->
-<!--        </field>-->
-<!--    </record>-->
+    <record id="car_checkout_form_view" model="ir.ui.view">
+        <field name="name">Car Checkout Form View</field>
+        <field name="model">car.checkout</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+                        <button name="action_assigned" string="Assign" type="object"
+                                class="oe_highlight" attrs="{'invisible':[('checkout_status','in',['assigned','checked_in'])]}"/>
+                        <button name="action_check_in" string="Checked In" type="object"
+                                class="oe_highlight" attrs="{'invisible':[('checkout_status','in',['submitted'])]}"/>
+                        <field name="checkout_status" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="customer_name_1"/>
+                            <field name="customer_email"/>
+                            <field name="customer_phone"/>
+                            <field name="customer_age"/>
+                            <field name="customer_city"/>
+                            <field name="driver"/>
+
+                        </group>
+                        <group>
+                            <field name="start_dt1"/>
+                            <field name="time_slot"/>
+                            <field name="end_date1"/>
+                            <field name="car2"/>
+                            <field name="fair"/>
+                            <field name="booking_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="car_checkout_calendar_view" model="ir.ui.view">
         <field name="name">car checkout calendar view</field>

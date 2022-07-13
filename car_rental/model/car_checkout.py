@@ -32,9 +32,11 @@ class CarCheckout(models.Model):
     fair = fields.Integer(string="fair", help="Total cost without tax.")
     time_slot = fields.Many2one("checkout.slots", string="Checkout time slot")
     driver = fields.Many2one("staff.data", domain=[("role", "=", "driver")])
-    booking_id = fields.Many2one("book.ride", string="fetches id from book_ride")
+    booking_id = fields.Many2one("book.ride", string="booking id", help="fetches id from book_ride")
     # booking_id = fields.Many2one("book.ride", string="fetches id from book_ride",
     #                              domain=[("cus_name", "=", customer_name_1)])
+    checkout_status = fields.Selection(
+        [('submitted', 'Submitted'), ('assigned', 'Assigned'), ('checked_in', "Checked In")], default='submitted')
 
     @api.model
     def create(self, values):
@@ -42,3 +44,9 @@ class CarCheckout(models.Model):
         rtn = super(CarCheckout, self).create(values)
         # print('name>>>', values['customer_name'])
         return rtn
+
+    def action_assigned(self):
+        self.checkout_status = 'assigned'
+
+    def action_check_in(self):
+        self.checkout_status = 'checked_in'

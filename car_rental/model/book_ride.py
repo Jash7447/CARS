@@ -190,21 +190,17 @@ class BookRide(models.Model):
         values['ride_booked'] = True
         values['book_status'] = 'submitted'
         rtn = super(BookRide, self).create(values)
-        # print(">>>>>>>>>>>>>customer name", rtn['cus_name'].name)
-        # car_rental = self.env['car.rental'].search([('name','=',values['cus_name'])])
-        # print(">>>>>>>>>>>>>>>>>>car_rental", car_rental.name)
-        # print(">>>>>>>>>>>>>>>>>>car_rental", car_rental.id)
-        # print('>>>>>>>>>>>>>>>>>>>>>>customer name', self.cus_name.id)
-        car_chekout = self.env['car.checkout'].sudo().create(
+        car_checkout = self.env['car.checkout'].sudo().create(
             {'customer_name_1': values['cus_name'],
              'customer_email': values['cus_email'],
              'customer_phone': values['cus_phone'],
+             'customer_city': values['cus_city'],
              'customer_age': values['cus_age'], 'start_dt1': values['ride_start_dt'],
              'end_date1': values['ride_end_date'], 'car2': values['car1'], 'fair': values['total_cost'],
              'time_slot': values['checkout_time_slots'],
              'booking_id': self.id})
 
-        print(">>>>>>>>>>>>>>car_chekout", car_chekout)
+        print(">>>>>>>>>>>>>>car_checkout", car_checkout)
         print('return value of create is >>', rtn)
         return rtn
 
