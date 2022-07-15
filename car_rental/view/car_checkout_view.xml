@@ -13,7 +13,8 @@
                     <field name="time_slot"/>
                     <field name="end_date1"/>
                     <field name="car2"/>
-                    <field name="driver"/>
+                    <field name="driver_req"/>
+                    <field name="driver" attrs="{'invisible':[('driver_req','!=', True)]}"/>
                     <field name="checkout_status"/>
             </tree>
         </field>
@@ -39,7 +40,8 @@
                             <field name="customer_phone"/>
                             <field name="customer_age"/>
                             <field name="customer_city"/>
-                            <field name="driver"/>
+                            <field name="driver_req"/>
+                            <field name="driver" attrs="{'invisible':[('driver_req','!=', True)]}"/>
 
                         </group>
                         <group>

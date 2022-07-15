@@ -9,6 +9,7 @@
                     <field name="cus_email"/>
                     <field name="cus_phone"/>
                     <field name="cus_age"/>
+                    <field name="cus_city"/>
                     <field name="driver_req"/>
                     <field name="ride_start_dt"/>
                     <field name="ride_end_date"/>

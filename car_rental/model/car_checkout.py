@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class CarCheckout(models.Model):
@@ -16,6 +17,7 @@ class CarCheckout(models.Model):
             self.start_dt1 = rec.booking_id.ride_start_dt
             self.time_slot = rec.booking_id.checkout_time_slots
             self.end_date1 = rec.booking_id.ride_end_date
+            self.driver_req = rec.booking_id.driver
             self.car2 = rec.booking_id.car1
 
     customer_name_1 = fields.Many2one("car.rental", string="Costumer name")
@@ -31,7 +33,8 @@ class CarCheckout(models.Model):
     car2 = fields.Many2one("car.data", string="Car")
     fair = fields.Integer(string="fair", help="Total cost without tax.")
     time_slot = fields.Many2one("checkout.slots", string="Checkout time slot")
-    driver = fields.Many2one("staff.data", domain=[("role", "=", "driver")])
+    driver_req = fields.Boolean(string="driver requirement")
+    driver = fields.Many2one("staff.data", domain=[("role", "=", "driver"), ("city", "=", "self.customer_city")])
     booking_id = fields.Many2one("book.ride", string="booking id", help="fetches id from book_ride")
     # booking_id = fields.Many2one("book.ride", string="fetches id from book_ride",
     #                              domain=[("cus_name", "=", customer_name_1)])
@@ -46,7 +49,13 @@ class CarCheckout(models.Model):
         return rtn
 
     def action_assigned(self):
-        self.checkout_status = 'assigned'
+        if self.driver_req:
+            if self.driver:
+                self.checkout_status = 'assigned'
+            else:
+                raise ValidationError("Please select a driver to validate the ride.")
+        else:
+            self.checkout_status = 'assigned'
 
     def action_check_in(self):
         self.checkout_status = 'checked_in'

@@ -177,6 +177,15 @@ class BookRide(models.Model):
 
     def submit_action(self):
         self.book_status = "submitted"
+        # entry = self.env['car.checkout'].sudo().create(
+        #     {'customer_name_1': self.cus_name,
+        #      'customer_email': self.cus_email,
+        #      'customer_phone': self.cus_phone,
+        #      'customer_city': self.cus_city,
+        #      'customer_age': self.cus_age, 'start_dt1': self.ride_start_dt,
+        #      'end_date1': self.ride_end_date, 'car2': self.car1, 'fair': self.total_cost,
+        #      'time_slot': self.checkout_time_slots, 'driver_req': self.driver_req,
+        #      'booking_id': self.id})
 
     def action_cancel(self):
         self.book_status = 'cancel'
@@ -197,7 +206,7 @@ class BookRide(models.Model):
              'customer_city': values['cus_city'],
              'customer_age': values['cus_age'], 'start_dt1': values['ride_start_dt'],
              'end_date1': values['ride_end_date'], 'car2': values['car1'], 'fair': values['total_cost'],
-             'time_slot': values['checkout_time_slots'],
+             'time_slot': values['checkout_time_slots'], 'driver_req': values['driver_req'],
              'booking_id': self.id})
 
         print(">>>>>>>>>>>>>>car_checkout", car_checkout)

@@ -27,6 +27,10 @@ class BookRideWizard(models.Model):
     book_status = fields.Selection(
         [('draft', 'Draft'), ('submitted', 'Submitted'), ('cancel', 'Cancel')], default='draft')
     ride_booked = fields.Boolean(string="Booked")
+    cus_city = fields.Selection(
+        [('Ahmedabad', 'Ahmedabad'), ('Bangalore', 'Bangalore'), ('Mumbai', 'Mumbai'), ('Surat', 'Surat')],
+        string="city",
+        required=True, help="Enter city")
 
     @api.onchange('cus_name', 'car1')
     def car_checkout_populate(self):
@@ -34,6 +38,7 @@ class BookRideWizard(models.Model):
             self.cus_email = rec.cus_name.email
             self.cus_phone = rec.cus_name.phone
             self.cus_age = rec.cus_name.age
+            self.cus_city = rec.cus_name.city
             self.cost_per_day = rec.car1.rent_price
             print("customer email >>>>>>>>>>>>>>", self.cus_email)
             print("customer phone >>>>>>>>>>>>>>", self.cus_phone)
@@ -46,7 +51,7 @@ class BookRideWizard(models.Model):
     def _date_difference(self):
         if self.ride_start_dt and self.ride_end_date:
             if self.ride_start_dt > self.ride_end_date:
-                raise ValidationError('Donchangeate_in should not greater than Date_out.')
+                raise ValidationError('Date in should not greater than Date out.')
             # self.days_interval = 0
             if self.ride_start_dt < self.ride_end_date:
                 day_calc = (self.ride_end_date - self.ride_start_dt).days
@@ -91,3 +96,15 @@ class BookRideWizard(models.Model):
 
     def create_booking(self):
         print("button is clicked")
+        car_checkout = self.env['book.ride'].sudo().create(
+            {'cus_name': self.cus_name.id,
+             'cus_email': self.cus_email,
+             'cus_phone': self.cus_phone,
+             'cus_city': self.cus_city,
+             'cost_per_day1': self.cost_per_day,
+             'days_interval': self.days_interval,
+             'cus_age': self.cus_age, 'ride_start_dt': self.ride_start_dt,
+             'ride_end_date': self.ride_end_date, 'car1': self.car1.id, 'total_cost': self.total_cost,
+             'checkout_time_slots': self.checkout_time_slots.id, 'driver_req': self.driver_req,
+             })
+        print(">>>>>>>121212>>", car_checkout)
